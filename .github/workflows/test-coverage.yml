@@ -47,14 +47,16 @@ jobs:
 
       - name: Compile tests
         run: |
-          javac -cp bin:lib/* -d bin/test \
+          CLASSPATH="bin:$(echo lib/*.jar | tr ' ' ':')"
+          javac -cp "$CLASSPATH" -d bin/test \
             src/test/java/com/calculator/*.java \
             src/test/java/com/calculator/api/*.java \
             src/test/java/com/calculator/exception/*.java
 
       - name: Run tests with detailed reporting
         run: |
-          java -cp bin:lib/*:bin/test org.junit.platform.console.ConsoleLauncher \
+          CLASSPATH="bin:$(echo lib/*.jar | tr ' ' ':'):bin/test"
+          java -cp "$CLASSPATH" org.junit.platform.console.ConsoleLauncher \
             --scan-classpath bin/test \
             --details=verbose \
             --details=summary
